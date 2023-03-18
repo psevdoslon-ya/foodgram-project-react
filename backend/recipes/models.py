@@ -61,7 +61,7 @@ class Recipe(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(
-        verbose_name='Наменование тега',
+        verbose_name='Название рецепта',
         max_length=200
     )
     image = models.ImageField(
