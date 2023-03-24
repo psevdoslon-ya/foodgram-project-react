@@ -11,7 +11,7 @@ class TagAdmin(ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     list_display = ('id', 'name', 'color', 'slug')
     search_fields = ('name', 'color', 'slug')
-    list_filter = ('name', 'color', 'slug')
+    list_filter = ('id', 'name', 'color', 'slug')
     save_on_top = True
     empty_value_display = '-пусто-'
 

@@ -48,6 +48,12 @@ class Ingredient(models.Model):
         ordering = ('name',)
         verbose_name = 'Ингридиент'
         verbose_name_plural = 'Ингридиенты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'measurement_unit'],
+                name='unique_ingredient'
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -61,7 +67,7 @@ class Recipe(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(
-        verbose_name='Наменование тега',
+        verbose_name='Название рецепта',
         max_length=200
     )
     image = models.ImageField(
@@ -100,6 +106,12 @@ class Recipe(models.Model):
         ordering = ('-pub_date',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['author', 'name'],
+                name='unique_author_name'
+            )
+        ]
 
     def __str__(self):
         return self.name
@@ -129,6 +141,12 @@ class IngredientInRecipe(models.Model):
         ordering = ('-id',)
         verbose_name = 'Ингридиент'
         verbose_name_plural = 'Количество ингридиентов'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='unique_recipe_ingredient'
+            )
+        ]
 
     def __str__(self):
         return f'{self.ingredient} -> {self.amount}'
@@ -138,19 +156,26 @@ class ShoppingList(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         verbose_name='Ингридиенты из рецептов',
-        related_name='ShoppingLists',
+        related_name='shoppinglists',
         on_delete=models.CASCADE
     )
     user = models.ForeignKey(
         User,
         verbose_name='Обладатель списка',
-        related_name='ShoppingLists',
+        related_name='shoppinglists',
         on_delete=models.CASCADE
     )
 
     class Meta:
+        ordering = ('-id',)
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['recipe', 'user'],
+                name='unique_shoping_list'
+            )
+        ]
 
     def __str__(self):
         return f'{self.recipe} -> {self.user}'
@@ -171,8 +196,15 @@ class Favorite(models.Model):
     )
 
     class Meta:
+        ordering = ('-id',)
         verbose_name = 'Любимый рецепт'
         verbose_name_plural = 'Любимые рецепты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['recipe', 'user'],
+                name='unique_favorite_recipe'
+            )
+        ]
 
     def __str__(self):
         return f'{self.recipe} -> {self.user}'
