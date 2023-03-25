@@ -1,7 +1,7 @@
-from django.contrib.admin import ModelAdmin, site, register
+from django.contrib.admin import ModelAdmin, register, site
+
 from .models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                      ShoppingList, Tag)
-
 
 site.site_header = 'Foodgram. Администрирование сайта.'
 
