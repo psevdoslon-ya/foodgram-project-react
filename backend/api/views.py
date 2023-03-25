@@ -3,7 +3,6 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from djoser.views import UserViewSet
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -13,66 +12,15 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingList, Tag)
-from users.models import Follow
 
 from .filters import TagFilter
 from .pagination import CustomPageNumberPagination
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
-from .serializers import (FollowSerializer, GetRecipeSerializer,
-                          IngredientSerializer, RecipeSerializer,
-                          ShortRecipeSerializer, TagSerializer)
+from .serializers import (GetRecipeSerializer, IngredientSerializer,
+                          RecipeSerializer, ShortRecipeSerializer,
+                          TagSerializer)
 
 User = get_user_model()
-
-
-class CustomUserViewSet(UserViewSet):
-    pagination_class = CustomPageNumberPagination
-
-    @action(detail=True, permission_classes=[IsAuthenticated],
-            methods=['POST', 'DELETE'])
-    def subscribe(self, request, id=None):
-        user = self.request.user
-        author = get_object_or_404(User, id=id)
-
-        if self.request.method == 'POST':
-            if user == author:
-                return Response(
-                    {'errors': 'Нельзя подписаться на самого себя!'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if Follow.objects.filter(user=user, author=author).exists():
-                return Response(
-                    {'errors': 'Вы уже подписаны на этого автора!'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            serializer = FollowSerializer(
-                Follow.objects.create(user=user, author=author),
-                context={'request': request}
-            )
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        if self.request.method == 'DELETE':
-            if user == author:
-                return Response(
-                    {'errors': 'Нельзя отписаться от самого себя!'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if Follow.objects.filter(user=user, author=author).exists():
-                Follow.objects.filter(user=user, author=author).delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-
-        return Response({'errors': 'Отписка уже произведена!'},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    @action(detail=False, permission_classes=[IsAuthenticated],
-            methods=['GET'])
-    def subscriptions(self, request):
-        user = self.request.user
-        queryset = Follow.objects.filter(user=user)
-        pages = self.paginate_queryset(queryset)
-        serializer = FollowSerializer(pages, many=True,
-                                      context={'request': request})
-        return self.get_paginated_response(serializer.data)
 
 
 class TagViewSet(ReadOnlyModelViewSet):
