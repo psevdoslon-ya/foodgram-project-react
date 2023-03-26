@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingList, Tag)
-from rest_framework import status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -22,7 +22,8 @@ from .serializers import (GetRecipeSerializer, IngredientSerializer,
 User = get_user_model()
 
 
-class TagViewSet(ReadOnlyModelViewSet):
+class TagViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                 viewsets.GenericViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAdminOrReadOnly,)
