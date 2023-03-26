@@ -1,17 +1,17 @@
 from django.contrib.auth import get_user_model
 from django_filters.rest_framework import FilterSet, filters
-from recipes.models import Recipe, Tag
+from recipes.models import Recipe
 
 User = get_user_model()
 
 
 class TagFilter(FilterSet):
-    tags = filters.ModelMultipleChoiceFilter(
-        field_name='tags__slug',
-        queryset=Tag.objects.all(),
-        to_field_name='slug',
-        always_filter=True
-    )
+    # tags = filters.ModelMultipleChoiceFilter(
+    #     field_name='tags__slug',
+    #     queryset=Tag.objects.all(),
+    #     to_field_name='slug'
+    # )
+    tags = filters.AllValuesMultipleFilter(field_name='tags__slug')
     author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_favorited = filters.BooleanFilter(method='get_is_favorited')
     is_in_shopping_cart = filters.BooleanFilter(
