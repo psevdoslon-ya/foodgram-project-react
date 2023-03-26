@@ -40,7 +40,6 @@ class IngredientViewSet(ReadOnlyModelViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    # queryset = Recipe.objects.all()
     pagination_class = CustomPageNumberPagination
     permission_classes = (IsOwnerOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
@@ -48,8 +47,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         tags = self.request.query_params.getlist('tags')
-        if not tags:
+        if tags:
             return Recipe.objects.filter(tags__slug__in=tags).distinct()
+        # return Recipe.objects.none()
         return Recipe.objects.all()
 
     def get_serializer_class(self):
