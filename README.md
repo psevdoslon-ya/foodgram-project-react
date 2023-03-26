@@ -6,6 +6,10 @@ Cайт Foodgram «Продуктовый помощник» - это онлай
 
 [Ссылка на проект на сервере Yandex.Cloud](http://http://51.250.8.234/)
 
+Логин (email) суперюзера: admin@admin.com
+
+Пароль суперюзера: admin
+
 ## Стек технологий
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
