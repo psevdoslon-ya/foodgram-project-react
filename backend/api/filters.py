@@ -10,7 +10,7 @@ class TagFilter(FilterSet):
         field_name='tags__slug',
         queryset=Tag.objects.all(),
         to_field_name='slug',
-        lookup_type='in'
+        lookup_type='eq'
     )
     author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_favorited = filters.BooleanFilter(method='get_is_favorited')
