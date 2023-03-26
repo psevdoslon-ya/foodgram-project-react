@@ -11,6 +11,8 @@ services:
   backend:
     image: psevdoslon/foodgram_backend:latest
     restart: always
+    expose:
+      - 8000
     volumes:
       - static_value:/app/backend_static/
       - media_value:/app/backend_media/
