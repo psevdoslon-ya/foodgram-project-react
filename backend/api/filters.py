@@ -9,8 +9,7 @@ class TagFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         queryset=Tag.objects.all(),
-        to_field_name='slug',
-        lookup_type='eq'
+        to_field_name='slug'
     )
     author = filters.ModelChoiceFilter(queryset=User.objects.all())
     is_favorited = filters.BooleanFilter(method='get_is_favorited')
