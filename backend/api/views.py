@@ -50,7 +50,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         tags = self.request.query_params.getlist('tags')
         if tags:
             return Recipe.objects.filter(tags__slug__in=tags).distinct()
-        return Recipe.objects.all()
+        return None
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
