@@ -9,7 +9,7 @@ services:
       - ./.env
 
   backend:
-    build: ../backend/
+    image: psevdoslon/foodgram_backend:latest
     restart: always
     volumes:
       - static_value:/app/backend_static/
@@ -20,9 +20,7 @@ services:
       - ./.env
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: psevdoslon/foodgram_frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
 
