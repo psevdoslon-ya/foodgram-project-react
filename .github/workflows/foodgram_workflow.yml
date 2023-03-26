@@ -67,7 +67,8 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           sudo systemctl stop nginx
-          cd foodgram-project-react/infra
+          sudo docker pull psevdoslon/foodgram_backend:latest
+          sudo docker pull psevdoslon/foodgram_frontend:latest
           sudo docker-compose stop
           sudo docker-compose rm backend
           rm .env
