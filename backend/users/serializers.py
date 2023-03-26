@@ -7,11 +7,21 @@ User = get_user_model()
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
+    email = serializers.EmailField()
+
     class Meta:
         model = User
         fields = ('email', 'id', 'username', 'first_name', 'last_name',
                   'password')
         extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_email(self, value):
+        email_in_lower = value.lower()
+        if User.objects.filter(email__iexact=email_in_lower).exists():
+            raise serializers.ValidationError(
+                'Такой email уже зарегистрирован!'
+            )
+        return email_in_lower
 
 
 class UserSerializer(serializers.ModelSerializer):
